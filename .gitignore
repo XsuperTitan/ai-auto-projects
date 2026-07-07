@@ -1,0 +1,54 @@
+# MAC
+.DS_Store
+
+# IntelliJ
+.idea/
+
+# Maven
+target/
+
+# Environment
+.env/
+
+# Node.js
+node_modules/
+builder-webui/node_modules/
+
+# Next.js build
+builder-webui/.next/
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+orchestrator.db
+
+# Deploy scripts (contain credentials)
+full_deploy.py
+quick_deploy.py
+
+# IDE
+.claude/
+.codebuddy/
+.workbuddy/
+
+# Environment secrets
+.env
+builder-webui/.env
+
+# Python virtualenvs (local worker runtime)
+.venv/
+venv/
+
+# User data
+builder-webui/workspace/
+
+# Temp scripts (contain credentials)
+deploy_ai.py
+deploy_fix.py
+diagnose_api.py
+read_log.py
+
+# Temp
+*.tar.gz
+deploy_temp/
