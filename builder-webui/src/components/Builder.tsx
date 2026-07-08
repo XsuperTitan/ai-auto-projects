@@ -172,11 +172,10 @@ export default function Builder() {
   );
 
   const handleAIGenerate = useCallback(
-    (mermaid: string) => {
+    (mermaid: string): string | null => {
       const result = parseMermaid(mermaid);
       if (!result) {
-        alert("AI generated invalid Mermaid — please try again with a more detailed description.");
-        return;
+        return "AI generated invalid Mermaid — please try again with a more detailed description.";
       }
       const normalized = normalizeGraph(result);
       setNodes(normalized.nodes);
@@ -189,6 +188,7 @@ export default function Builder() {
         });
         setTimeout(() => fitView({ duration: 300 }), 50);
       }, 50);
+      return null;
     },
     [setNodes, setEdges, fitView]
   );

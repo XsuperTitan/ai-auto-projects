@@ -1,29 +1,48 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useRef, useEffect } from "react";
 
 interface AIGeneratePanelProps {
   onClose: () => void;
-  onInsert: (mermaid: string) => void;
+  onInsert: (mermaid: string) => string | null;
+  backendUrl?: string;
 }
 
-const AIGeneratePanel: React.FC<AIGeneratePanelProps> = ({ onClose, onInsert }) => {
+const AIGeneratePanel: React.FC<AIGeneratePanelProps> = ({ onClose, onInsert, backendUrl }) => {
   const [prompt, setPrompt] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [preview, setPreview] = useState("");
+  const abortRef = useRef<AbortController | null>(null);
+  const promptRef = useRef(prompt);
+  promptRef.current = prompt;
+
+  // Cancel in-flight request on unmount or new request
+  useEffect(() => {
+    return () => {
+      if (abortRef.current) abortRef.current.abort();
+    };
+  }, []);
 
   const handleGenerate = useCallback(async () => {
-    if (!prompt.trim() || prompt.trim().length < 5) {
+    const currentPrompt = promptRef.current;
+    if (!currentPrompt.trim() || currentPrompt.trim().length < 5) {
       setError("Please enter at least 5 characters");
       return;
     }
+    // Cancel any in-flight request before starting a new one
+    if (abortRef.current) abortRef.current.abort();
+    const controller = new AbortController();
+    abortRef.current = controller;
+
     setLoading(true);
     setError("");
     setPreview("");
     try {
-      const res = await fetch("http://localhost:3001/api/generate-flow", {
+      const baseUrl = backendUrl || "http://localhost:3001";
+      const res = await fetch(baseUrl + "/api/generate-flow", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ prompt: prompt.trim() }),
+        body: JSON.stringify({ prompt: currentPrompt.trim() }),
+        signal: controller.signal,
       });
       if (!res.ok) {
         const err = await res.json().catch(() => ({ error: "Request failed" }));
@@ -32,16 +51,22 @@ const AIGeneratePanel: React.FC<AIGeneratePanelProps> = ({ onClose, onInsert }) 
       const data = await res.json();
       setPreview(data.mermaid);
     } catch (e) {
+      if ((e as Error).name === "AbortError") return;
       setError((e as Error).message);
     } finally {
+      if (abortRef.current === controller) abortRef.current = null;
       setLoading(false);
     }
-  }, [prompt]);
+  }, [backendUrl]);
 
   const handleInsert = useCallback(() => {
     if (preview) {
-      onInsert(preview);
-      onClose();
+      const errMsg = onInsert(preview);
+      if (errMsg) {
+        setError(errMsg);
+      } else {
+        onClose();
+      }
     }
   }, [preview, onInsert, onClose]);
 
