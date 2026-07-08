@@ -4,6 +4,7 @@ import type { Node, Edge, Connection } from "@xyflow/react";
 import Canvas from "./Canvas";
 import Toolbar from "./Toolbar";
 import CommandPalette from "./CommandPalette";
+import AIGeneratePanel from "./AIGeneratePanel";
 import { autoLayout } from "../lib/autoLayout";
 import { parseMermaid } from "../lib/mermaidParser";
 
@@ -46,6 +47,7 @@ export default function Builder() {
   const [edges, setEdges, onEdgesChange] = useEdgesState<Edge>([]);
   const [showPalette, setShowPalette] = useState(false);
   const [snapToGrid, setSnapToGrid] = useState(false);
+  const [showAIPanel, setShowAIPanel] = useState(false);
   const { fitView } = useReactFlow();
 
   const onConnect = useCallback(
@@ -58,6 +60,10 @@ export default function Builder() {
       if ((e.ctrlKey || e.metaKey) && e.key === "k") {
         e.preventDefault();
         setShowPalette((v) => !v);
+      }
+      if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key === "G") {
+        e.preventDefault();
+        setShowAIPanel((v) => !v);
       }
     };
     window.addEventListener("keydown", handler);
@@ -165,6 +171,28 @@ export default function Builder() {
     [setNodes, setEdges, fitView]
   );
 
+  const handleAIGenerate = useCallback(
+    (mermaid: string) => {
+      const result = parseMermaid(mermaid);
+      if (!result) {
+        alert("AI generated invalid Mermaid — please try again with a more detailed description.");
+        return;
+      }
+      const normalized = normalizeGraph(result);
+      setNodes(normalized.nodes);
+      setEdges(normalized.edges);
+      // apply auto layout so generated nodes look clean
+      setTimeout(() => {
+        setNodes((nds) => {
+          const layoutResult = autoLayout({ nodes: nds, edges: normalized.edges });
+          return layoutResult.nodes.map((n: any) => ({ ...n, position: n.position || { x: 0, y: 0 } }));
+        });
+        setTimeout(() => fitView({ duration: 300 }), 50);
+      }, 50);
+    },
+    [setNodes, setEdges, fitView]
+  );
+
   return (
     <div className="app">
       <Toolbar
@@ -174,6 +202,7 @@ export default function Builder() {
         onExport={handleExport}
         onClear={handleClear}
         onImportMermaid={handleImportMermaid}
+        onAIGenerate={() => setShowAIPanel(true)}
         snapToGrid={snapToGrid}
         onToggleSnap={() => setSnapToGrid((v) => !v)}
       />
@@ -188,6 +217,12 @@ export default function Builder() {
       />
       {showPalette && (
         <CommandPalette onClose={() => setShowPalette(false)} />
+      )}
+      {showAIPanel && (
+        <AIGeneratePanel
+          onClose={() => setShowAIPanel(false)}
+          onInsert={handleAIGenerate}
+        />
       )}
     </div>
   );

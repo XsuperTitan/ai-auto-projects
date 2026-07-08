@@ -261,3 +261,119 @@ body {
   color: #fff;
   cursor: pointer;
 }
+
+/* ---------- AI Generate Panel ---------- */
+.ai-panel {
+  width: min(580px, 94vw);
+  padding: 0;
+}
+
+.ai-panel-header {
+  padding: 14px 18px;
+  font-weight: 700;
+  font-size: 15px;
+  border-bottom: 1px solid var(--border);
+}
+
+.ai-panel textarea {
+  width: 100%;
+  border: none;
+  outline: none;
+  padding: 14px 18px;
+  font-size: 13px;
+  background: transparent;
+  color: var(--text);
+  resize: vertical;
+  font-family: inherit;
+  border-bottom: 1px solid var(--border);
+}
+
+.ai-panel textarea::placeholder {
+  color: var(--muted);
+  opacity: 0.6;
+}
+
+.ai-error {
+  margin: 10px 18px 0;
+  padding: 8px 12px;
+  background: rgba(220, 38, 38, 0.15);
+  border: 1px solid rgba(220, 38, 38, 0.35);
+  border-radius: 8px;
+  color: #fca5a5;
+  font-size: 13px;
+}
+
+.ai-loading {
+  margin: 10px 18px 0;
+  padding: 10px 14px;
+  background: rgba(99, 102, 241, 0.1);
+  border: 1px solid rgba(99, 102, 241, 0.25);
+  border-radius: 8px;
+  color: var(--accent);
+  font-size: 13px;
+  text-align: center;
+}
+
+.ai-preview {
+  margin: 10px 18px 0;
+}
+
+.ai-preview-label {
+  font-size: 12px;
+  color: var(--muted);
+  margin-bottom: 6px;
+}
+
+.ai-preview-code {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 12px 14px;
+  font-size: 12px;
+  font-family: "SF Mono", "Fira Code", "Consolas", monospace;
+  color: var(--accent-2);
+  max-height: 180px;
+  overflow: auto;
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+
+.ai-actions {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+  padding: 12px 18px 16px;
+  border-top: 1px solid var(--border);
+  margin-top: 12px;
+}
+
+.ai-actions button {
+  background: var(--bg-soft);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 7px 14px;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.ai-actions button:hover:not(:disabled) {
+  border-color: var(--accent);
+  color: #fff;
+}
+
+.ai-actions button.primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+
+.ai-actions button.primary:hover:not(:disabled) {
+  filter: brightness(1.1);
+}
+
+.ai-actions button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
