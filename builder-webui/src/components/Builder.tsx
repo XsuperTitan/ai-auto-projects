@@ -6,7 +6,7 @@ import Toolbar from "./Toolbar";
 import CommandPalette from "./CommandPalette";
 import AIGeneratePanel from "./AIGeneratePanel";
 import { autoLayout } from "../lib/autoLayout";
-import { parseMermaid, normalizeGraph } from "../lib/mermaidParser";
+import { parseMermaid } from "../lib/mermaidParser";
 
 function normalizeGraph(raw: any): { nodes: Node[]; edges: Edge[] } {
   const nodes: Node[] = (raw.nodes || []).map((n: any) => ({

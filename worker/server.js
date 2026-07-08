@@ -18,7 +18,7 @@ function readBody(req) {
 }
 
 function sanitizeMermaid(code) {
-  let c = code.replace(/^```(?:mermaid)?\s*\n?/gm, "").replace(/```\s*$/gm, "").trim();
+  let c = code.replace(/^```(?:mermaid)?\s*\n?/, "").replace(/```\s*$/, "").trim();
   if (!c.match(/^(flowchart|graph)\s+/i)) {
     const lines = c.split("\n").filter(Boolean);
     c = "flowchart TD\n" + lines.join("\n");
