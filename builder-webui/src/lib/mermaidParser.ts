@@ -134,3 +134,7 @@ export function parseMermaid(text: string): { nodes: any[]; edges: any[]; direct
   ensureSourceEndNodes(nodeList, edges);
   return { nodes: nodeList, edges, direction };
 }
+
+export function normalizeGraph(result: { nodes: any[]; edges: any[] }) {
+    return { nodes: result.nodes, edges: result.edges };
+}
