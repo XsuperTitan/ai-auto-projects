@@ -26,6 +26,7 @@ interface CanvasProps {
   onNodesChange: OnNodesChange;
   onEdgesChange: OnEdgesChange;
   onConnect: (connection: Connection) => void;
+  onNodeDoubleClick: (event: React.MouseEvent, node: Node) => void;
   onEdgeDoubleClick: (event: React.MouseEvent, edge: Edge) => void;
   snapToGrid: boolean;
 }
@@ -43,6 +44,7 @@ const Canvas: React.FC<CanvasProps> = ({
   onNodesChange,
   onEdgesChange,
   onConnect,
+  onNodeDoubleClick,
   onEdgeDoubleClick,
   snapToGrid,
 }) => {
@@ -56,6 +58,7 @@ const Canvas: React.FC<CanvasProps> = ({
         onNodesChange={onNodesChange}
         onEdgesChange={onEdgesChange}
         onConnect={onConnect}
+        onNodeDoubleClick={onNodeDoubleClick}
         onEdgeDoubleClick={onEdgeDoubleClick}
         nodeTypes={nodeTypes}
         defaultEdgeOptions={defaultEdgeOptions}

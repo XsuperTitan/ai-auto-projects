@@ -97,6 +97,19 @@ export default function Builder() {
     fitView({ duration: 300 });
   }, [fitView]);
 
+  const handleNodeDoubleClick = useCallback(
+    (_event: React.MouseEvent, node: Node) => {
+      const currentLabel = (node.data?.label as string) || "";
+      const label = window.prompt("Edit node label:", currentLabel);
+      if (label !== null && label.trim() !== "") {
+        setNodes((nds) =>
+          nds.map((n) => (n.id === node.id ? { ...n, data: { ...n.data, label } } : n))
+        );
+      }
+    },
+    [setNodes]
+  );
+
   const handleEdgeDoubleClick = useCallback(
     (_event: React.MouseEvent, edge: Edge) => {
       const currentLabel = (edge.label as string) || "";
@@ -212,6 +225,7 @@ export default function Builder() {
         onNodesChange={onNodesChange}
         onEdgesChange={onEdgesChange}
         onConnect={onConnect}
+        onNodeDoubleClick={handleNodeDoubleClick}
         onEdgeDoubleClick={handleEdgeDoubleClick}
         snapToGrid={snapToGrid}
       />
