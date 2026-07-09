@@ -38,7 +38,7 @@ const Toolbar: React.FC<ToolbarProps> = ({
     <>
       <div className="toolbar">
         <span className="brand">
-          ⚡ Builder <small>v0.1</small>
+          ⚡ AI智能工作流画布 <small>v0.1</small>
         </span>
         <button onClick={onAutoLayout} title="自动布局">
           📐 自动布局
