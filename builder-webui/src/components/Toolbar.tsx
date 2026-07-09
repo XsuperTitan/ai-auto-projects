@@ -7,6 +7,7 @@ interface ToolbarProps {
   onExport: () => void;
   onClear: () => void;
   onImportMermaid: (text: string) => void;
+  onAIGenerate: () => void;
   snapToGrid: boolean;
   onToggleSnap: () => void;
 }
@@ -18,6 +19,7 @@ const Toolbar: React.FC<ToolbarProps> = ({
   onExport,
   onClear,
   onImportMermaid,
+  onAIGenerate,
   snapToGrid,
   onToggleSnap,
 }) => {
@@ -60,11 +62,14 @@ const Toolbar: React.FC<ToolbarProps> = ({
         <button onClick={() => setShowMermaid(true)} title="导入 Mermaid">
           📋 Mermaid
         </button>
+        <button onClick={onAIGenerate} title="AI 生成流程图">
+          🤖 AI 生成
+        </button>
         <button onClick={onClear} title="清空画布">
           🗑️ 清空
         </button>
         <span className="spacer" />
-        <span className="hint">Ctrl+K 命令面板 · 双击边改标签</span>
+        <span className="hint">Ctrl+K 命令面板 · Ctrl+Shift+G AI 生成 · 双击边改标签</span>
       </div>
 
       {showMermaid && (
